@@ -42,7 +42,6 @@ namespace JobManagement
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            //services.AddSingleton<ApplicationDbContext>();
             services.AddScoped<ApplicationUoW>();
         }
 
