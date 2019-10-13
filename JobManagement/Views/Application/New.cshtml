@@ -1,0 +1,24 @@
+﻿@model JobManagement.Models.JobApplication
+@{
+    ViewData["Title"] = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New</h2>
+
+@using (Html.BeginForm("AddApplication", "Application", FormMethod.Post))
+{
+    @Html.LabelFor(a => a.FirstName)
+    @Html.TextBoxFor(a => a.FirstName)
+    <br />
+    @Html.LabelFor(a => a.LastName)
+    @Html.TextBoxFor(a => a.LastName)
+    <br />
+    @Html.LabelFor(a => a.Position)
+    @Html.TextBoxFor(a => a.Position)
+    <button type="submit">Submit</button>
+
+    @Html.HiddenFor(a => a.Id)
+}
+
+

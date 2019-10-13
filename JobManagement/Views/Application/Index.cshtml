@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+cos
+
+<h2>Index</h2>
+
+cos
+@foreach (var job in ViewData["jobs"] as List<JobManagement.Models.JobApplication>)
+{
+    job.FirstName
+}
