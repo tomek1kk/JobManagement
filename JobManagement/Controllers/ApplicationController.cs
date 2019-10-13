@@ -11,16 +11,16 @@ namespace JobManagement.Controllers
     public class ApplicationController : Controller
     {
         private ApplicationUoW applicationUoW;
-        //private ApplicationDbContext context;
 
         public ApplicationController(ApplicationUoW applicationUoW)
         {
             this.applicationUoW = applicationUoW;
         }
 
-        public IActionResult Index()
+        public IActionResult Index() 
         {
-
+            List<JobApplication> jobs = applicationUoW.ApplicationsRepository.GetAll();
+            ViewData["jobs"] = jobs;
             return View();
         }
 
@@ -31,13 +31,8 @@ namespace JobManagement.Controllers
 
         public IActionResult AddApplication(JobApplication job)
         {
-            if (job != null)
-            {
-                //context.Add(job);
-                //context.SaveChanges();
-                applicationUoW.ApplicationsRepository.AddItem(job);
-                applicationUoW.Save();
-            }
+            applicationUoW.ApplicationsRepository.AddItem(job);
+            applicationUoW.Save();
 
             return RedirectToAction("Index");
         }
