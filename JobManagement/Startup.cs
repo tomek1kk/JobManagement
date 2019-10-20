@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using JobManagement.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
+using Microsoft.AspNetCore.Authentication;
 
 namespace JobManagement
 {
@@ -33,6 +35,9 @@ namespace JobManagement
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme)
+                .AddAzureADB2C(options => Configuration.Bind("AzureAdB2C", options));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
