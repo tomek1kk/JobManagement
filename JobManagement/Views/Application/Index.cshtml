@@ -13,6 +13,7 @@
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Position</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody id="table-body">
@@ -49,11 +50,22 @@
                         trLastName.textContent = application.lastName;
                         let trPosition = document.createElement("td");
                         trPosition.textContent = application.position;
+                        let trButtons = document.createElement("td");
+                        trButtons.classList.add("tr-buttons");
+                        let deleteButton = document.createElement("button");
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.classList.add("btn", "btn-danger");
+                        let editButton = document.createElement("button");
+                        editButton.textContent = 'Edit';
+                        editButton.classList.add("btn", "btn-info");
+                        trButtons.appendChild(editButton);
+                        trButtons.appendChild(deleteButton);
 
                         tableRow.appendChild(th);
                         tableRow.appendChild(trFirstName);
                         tableRow.appendChild(trLastName);
                         tableRow.appendChild(trPosition);
+                        tableRow.appendChild(trButtons);
 
                         document.getElementById("table-body").appendChild(tableRow);
                     });
@@ -66,3 +78,23 @@
         }
     </script>
 }
+
+<style>
+    .btn-danger {
+        padding: 5px;
+        font-size: 11px;
+    }
+
+    .btn-info {
+        padding: 5px;
+        margin-right: 5px;
+        padding-right: 10px;
+        padding-left: 10px;
+        font-size: 11px;
+    }
+
+    .tr-buttons {
+        width: 10%;
+    }
+
+</style>
