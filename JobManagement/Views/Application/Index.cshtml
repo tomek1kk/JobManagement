@@ -6,12 +6,63 @@
 
 <h2>Index</h2>
 
-@foreach (var job in ViewData["jobs"] as List<JobManagement.Models.JobApplication>)
-{
-    <label>First name: @job.FirstName</label>
-    <br/>
-    <label>Last name: @job.LastName</label>
-    <br/>
-    <label>Apply for: @job.Position</label>
-    <br/>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Position</th>
+        </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+</table>
+
+
+
+
+@section Scripts {
+    <script>
+        var page = 1;
+        $(document).ready(function () {
+            loadApplications(1);
+        });
+        function loadApplications(page) {
+            $.ajax({
+                url: "api/Job/GetAll",
+                type: "GET",
+                success: function (response) {
+                    console.log("im here");
+                    console.log(response);
+                    $.each(response.jobApplications, function (i, application) {
+                        console.log(application);
+                        let tableRow = document.createElement("tr");
+
+                        let th = document.createElement("th");
+                        th.scope = "row";
+                        th.textContent = application.id;
+
+                        let trFirstName = document.createElement("td");
+                        trFirstName.textContent = application.firstName;
+                        let trLastName = document.createElement("td");
+                        trLastName.textContent = application.lastName;
+                        let trPosition = document.createElement("td");
+                        trPosition.textContent = application.position;
+
+                        tableRow.appendChild(th);
+                        tableRow.appendChild(trFirstName);
+                        tableRow.appendChild(trLastName);
+                        tableRow.appendChild(trPosition);
+
+                        document.getElementById("table-body").appendChild(tableRow);
+                    });
+
+                },
+                error: function () {
+                    alert("blad");
+                }
+            });
+        }
+    </script>
 }

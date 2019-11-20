@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JobManagement.Data;
 using JobManagement.Models;
+using JobManagement.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,9 +22,16 @@ namespace JobManagement.Controllers
 
         [HttpGet]
         [Route("api/[controller]/GetAll")]
-        public IEnumerable<JobApplication> GetAll()
+        public JobListViewModel GetAll()
         {
-            return applicationUoW.ApplicationsRepository.GetAll();
+            return new JobListViewModel(applicationUoW.ApplicationsRepository.GetAll());
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/Get/{id}")]
+        public JobApplication Get(int id)
+        {
+            return applicationUoW.ApplicationsRepository.GetAll().Find(job => job.Id == id);
         }
     }
 }
