@@ -34,10 +34,8 @@
                 url: "api/Job/GetAll",
                 type: "GET",
                 success: function (response) {
-                    console.log("im here");
-                    console.log(response);
+                    document.getElementById("table-body").innerHTML = '';
                     $.each(response.jobApplications, function (i, application) {
-                        console.log(application);
                         let tableRow = document.createElement("tr");
 
                         let th = document.createElement("th");
@@ -55,6 +53,7 @@
                         let deleteButton = document.createElement("button");
                         deleteButton.textContent = 'Delete';
                         deleteButton.classList.add("btn", "btn-danger");
+                        deleteButton.addEventListener("click", function () { deleteRow(application.id); });
                         let editButton = document.createElement("button");
                         editButton.textContent = 'Edit';
                         editButton.classList.add("btn", "btn-info");
@@ -72,7 +71,20 @@
 
                 },
                 error: function () {
-                    alert("blad");
+                    alert("load applications error");
+                }
+            });
+        }
+        function deleteRow(id) {
+            $.ajax({
+                url: "api/Job/Delete/" + id,
+                type: "DELETE",
+                success: function () {
+                    console.log("trying to delete item with id :" + id);
+                    loadApplications(0);
+                },
+                error: function () {
+                    alert("delete error");
                 }
             });
         }
@@ -94,7 +106,7 @@
     }
 
     .tr-buttons {
-        width: 10%;
+        width: 15%;
     }
 
 </style>

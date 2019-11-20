@@ -33,5 +33,13 @@ namespace JobManagement.Controllers
         {
             return applicationUoW.ApplicationsRepository.GetAll().Find(job => job.Id == id);
         }
+
+        [HttpDelete]
+        [Route("api/[Controller]/Delete/{id}")]
+        public void Delete(int id)
+        {
+            applicationUoW.ApplicationsRepository.DeleteItem(applicationUoW.ApplicationsRepository.GetAll().Find(j => j.Id == id));
+            applicationUoW.Save();
+        }
     }
 }
