@@ -33,6 +33,11 @@ namespace JobManagement.Data
             dbSet.Remove(item);
         }
 
+        public void UpdateItem(T item)
+        {
+            dbSet.Update(item);
+        }
+
 
     }
 }

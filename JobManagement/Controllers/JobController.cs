@@ -41,5 +41,13 @@ namespace JobManagement.Controllers
             applicationUoW.ApplicationsRepository.DeleteItem(applicationUoW.ApplicationsRepository.GetAll().Find(j => j.Id == id));
             applicationUoW.Save();
         }
+
+        [HttpPut]
+        [Route("api/[Controller]/Update/{id}")]
+        public void Update(int id, [FromBody] JobApplication jobApplication)
+        {
+            applicationUoW.ApplicationsRepository.UpdateItem(jobApplication);
+            applicationUoW.Save();
+        }
     }
 }
