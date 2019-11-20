@@ -79,7 +79,7 @@
 
         function saveApplication(application) {
             $.ajax({
-                url: "api/Job/Update/" + application.id,
+                url: "api/Job/Update",
                 type: "PUT",
                 data: JSON.stringify(application),
                 success: function () {

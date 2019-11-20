@@ -43,8 +43,8 @@ namespace JobManagement.Controllers
         }
 
         [HttpPut]
-        [Route("api/[Controller]/Update/{id}")]
-        public void Update(int id, [FromBody] JobApplication jobApplication)
+        [Route("api/[Controller]/Update")]
+        public void Update([FromBody] JobApplication jobApplication)
         {
             applicationUoW.ApplicationsRepository.UpdateItem(jobApplication);
             applicationUoW.Save();
