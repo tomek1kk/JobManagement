@@ -1,20 +1,17 @@
-﻿using JobManagement.Models;
+﻿using JobManagement.Data;
+using JobManagement.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobManagement.ViewModels
 {
-    public class JobListViewModel
+    public class AddApplicationViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime ApplyDate { get; set; }
-        public string ApplicationStatus { get; set; }
         public string Position { get; set; }
-
     }
-
 }

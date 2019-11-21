@@ -13,32 +13,56 @@ namespace JobManagement.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        private ApplicationUoW applicationUoW;
+        private GenericUoW<JobApplication> applicationUoW;
+        private GenericUoW<Position> positionUoW;
 
-        public JobController(ApplicationUoW applicationUoW)
+        public JobController(GenericUoW<JobApplication> applicationUoW, GenericUoW<Position> positionUoW)
         {
             this.applicationUoW = applicationUoW;
+            this.positionUoW = positionUoW;
         }
 
         [HttpGet]
         [Route("api/[controller]/GetAll")]
-        public JobListViewModel GetAll()
+        public IEnumerable<JobApplication> GetAll()
         {
-            return new JobListViewModel(applicationUoW.ApplicationsRepository.GetAll());
+            return applicationUoW.Repository.GetAll();
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/GetListViewModel")]
+        public IEnumerable<JobListViewModel> GetListViewModel()
+        {
+            var applications = applicationUoW.Repository.GetAll();
+            List<JobListViewModel> jobViews = new List<JobListViewModel>();
+            for (int i = 0; i < applications.Count; i++)
+            {
+                jobViews.Add(new JobListViewModel
+                {
+                    FirstName = applications[i].FirstName,
+                    LastName = applications[i].LastName,
+                    ApplyDate = applications[i].ApplyDate,
+                    ApplicationStatus = applications[i].ApplicationStatus == ApplicationStatus.ACCEPTED ? "Accepted" : 
+                                        applications[i].ApplicationStatus == ApplicationStatus.PENDING ? "Pending" : "Rejected",
+                    Position = positionUoW.Repository.GetItem(applications[i].PositionId).PositionName
+                });
+            }
+
+            return jobViews;
         }
 
         [HttpGet]
         [Route("api/[controller]/Get/{id}")]
         public JobApplication Get(int id)
         {
-            return applicationUoW.ApplicationsRepository.GetAll().Find(job => job.Id == id);
+            return applicationUoW.Repository.GetAll().Find(job => job.Id == id);
         }
 
         [HttpDelete]
         [Route("api/[Controller]/Delete/{id}")]
         public void Delete(int id)
         {
-            applicationUoW.ApplicationsRepository.DeleteItem(applicationUoW.ApplicationsRepository.GetAll().Find(j => j.Id == id));
+            applicationUoW.Repository.DeleteItem(applicationUoW.Repository.GetAll().Find(j => j.Id == id));
             applicationUoW.Save();
         }
 
@@ -46,7 +70,7 @@ namespace JobManagement.Controllers
         [Route("api/[Controller]/Update")]
         public void Update([FromBody] JobApplication jobApplication)
         {
-            applicationUoW.ApplicationsRepository.UpdateItem(jobApplication);
+            applicationUoW.Repository.UpdateItem(jobApplication);
             applicationUoW.Save();
         }
     }

@@ -1,4 +1,4 @@
-﻿@model JobManagement.Models.JobApplication
+﻿@model JobManagement.ViewModels.AddApplicationViewModel
 @{
     ViewData["Title"] = "New";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,17 +8,38 @@
 
 @using (Html.BeginForm("AddApplication", "Application", FormMethod.Post))
 {
-    @Html.LabelFor(a => a.FirstName)
-    @Html.TextBoxFor(a => a.FirstName)
-    <br />
-    @Html.LabelFor(a => a.LastName)
-    @Html.TextBoxFor(a => a.LastName)
-    <br />
-    @Html.LabelFor(a => a.Position)
-    @Html.TextBoxFor(a => a.Position)
+    <div class="form-group">
+        @Html.LabelFor(a => a.FirstName)
+        @Html.TextBoxFor(a => a.FirstName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(a => a.LastName)
+        @Html.TextBoxFor(a => a.LastName, new { @class = "form-control" })
+    </div>
+
+    @*@Html.LabelFor(m => m.SelectedId)*@
+    @*@Html.DropDownListFor(a => a.JobApplication.Id, Model.Positions);*@
+
     <button type="submit">Submit</button>
 
-    @Html.HiddenFor(a => a.Id)
+    @*@Html.HiddenFor(a => a.JobApplication.Id)*@
+    @Html.HiddenFor(a => a.Position)
 }
 
+@*<form>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>*@
 

@@ -10,10 +10,11 @@
 <table id="main-table" class="table table-striped table-bordered table-sm">
     <thead>
         <tr>
-            <th scope="col">Id</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
-            <th scope="col" contenteditable="true">Position</th>
+            <th scope="col">Position</th>
+            <th scope="col">Apply Date</th>
+            <th scope="col">Status</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -30,16 +31,13 @@
         });
         function loadApplications(page) {
             $.ajax({
-                url: "api/Job/GetAll",
+                url: "api/Job/GetListViewModel",
                 type: "GET",
                 success: function (response) {
                     document.getElementById("table-body").innerHTML = '';
-                    $.each(response.jobApplications, function (i, application) {
+                    $.each(response, function (i, application) {
+                        console.log(application);
                         let tableRow = document.createElement("tr");
-
-                        let th = document.createElement("th");
-                        th.scope = "row";
-                        th.textContent = application.id;
 
                         let columns = getTableColumns(application);
 
@@ -48,7 +46,6 @@
 
                         createEditDeleteButtons(columns, trButtons, application);
 
-                        tableRow.appendChild(th);
                         columns.forEach(c => tableRow.appendChild(c));
                         tableRow.appendChild(trButtons);
 
@@ -136,8 +133,12 @@
             trLastName.textContent = application.lastName;
             let trPosition = document.createElement("td");
             trPosition.textContent = application.position;
+            let trDate = document.createElement("td");
+            trDate.textContent = application.applyDate;
+            let trStatus = document.createElement("td");
+            trStatus.textContent = application.applicationStatus;
 
-            return [trFirstName, trLastName, trPosition];
+            return [trFirstName, trLastName, trPosition, trDate, trStatus];
         }
 
         function removeAllChilds(node) {

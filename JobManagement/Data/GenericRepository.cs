@@ -38,6 +38,14 @@ namespace JobManagement.Data
             dbSet.Update(item);
         }
 
+        public T GetItem(int id)
+        {
+            var item = dbSet.Find(id);
+            if (item == null)
+                throw new Exception("item not found");
+            return item;
+        }
+
 
     }
 }
