@@ -13,10 +13,12 @@ namespace JobManagement.Controllers
     public class ApplicationController : Controller
     {
         private GenericUoW<JobApplication> applicationUoW;
+        private GenericUoW<Position> positionUoW;
 
-        public ApplicationController(GenericUoW<JobApplication> applicationUoW)
+        public ApplicationController(GenericUoW<JobApplication> applicationUoW, GenericUoW<Position> positionUoW)
         {
             this.applicationUoW = applicationUoW;
+            this.positionUoW = positionUoW;
         }
 
         public IActionResult Index() 
@@ -28,7 +30,10 @@ namespace JobManagement.Controllers
 
         public IActionResult New()
         {
-            return View();
+            return View(new AddApplicationViewModel
+            {
+                Positions = positionUoW.Repository.GetAll().Select(c => c.PositionName)
+            });
         }
 
         public IActionResult AddApplication(AddApplicationViewModel job)
@@ -39,7 +44,9 @@ namespace JobManagement.Controllers
                 LastName = job.LastName,
                 ApplicationStatus = ApplicationStatus.PENDING,
                 ApplyDate = DateTime.Now,
-                PositionId = 1
+                PositionId = positionUoW.Repository.GetAll().Find(p => p.PositionName == job.Position).PositionID,
+                PhoneNumber = job.PhoneNumber,
+                Email = job.Email
             };
 
 

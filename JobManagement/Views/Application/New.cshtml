@@ -16,30 +16,22 @@
         @Html.LabelFor(a => a.LastName)
         @Html.TextBoxFor(a => a.LastName, new { @class = "form-control" })
     </div>
+    <div class="form-group">
+        @Html.LabelFor(a => a.PhoneNumber)
+        @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(a => a.Email)
+        @Html.TextBoxFor(a => a.Email, new { @class = "form-control" })
+    </div>
 
-    @*@Html.LabelFor(m => m.SelectedId)*@
-    @*@Html.DropDownListFor(a => a.JobApplication.Id, Model.Positions);*@
+    <div class="form-group">
+        @Html.DropDownListFor(m => m.Position,
+            Model.Positions.Select(c => new SelectListItem {Text =c, Value =c}),
+            new { @class = "form-control" })
+    </div>
 
     <button type="submit">Submit</button>
 
-    @*@Html.HiddenFor(a => a.JobApplication.Id)*@
-    @Html.HiddenFor(a => a.Position)
+    @Html.HiddenFor(a => a.Positions)
 }
-
-@*<form>
-        <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>*@
-

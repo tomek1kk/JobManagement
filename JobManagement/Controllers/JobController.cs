@@ -39,6 +39,7 @@ namespace JobManagement.Controllers
             {
                 jobViews.Add(new JobListViewModel
                 {
+                    Id = applications[i].Id,
                     FirstName = applications[i].FirstName,
                     LastName = applications[i].LastName,
                     ApplyDate = applications[i].ApplyDate,

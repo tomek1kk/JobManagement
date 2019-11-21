@@ -7,7 +7,11 @@ namespace JobManagement.Models
 {
     public class Position
     {
-        public int PositionID { get; set; }
-        public string PositionName { get; set; }
+        public virtual int PositionID { get; set; }
+        public virtual string PositionName { get; set; }
+        public int Salary { get; set; }
+        public string Location { get; set; }
+        public DateTime AddTime { get; set; }
+        public string Description { get; set; }
     }
 }

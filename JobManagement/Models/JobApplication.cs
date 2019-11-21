@@ -16,6 +16,8 @@ namespace JobManagement.Models
         public string LastName { get; set; }
         public DateTime ApplyDate { get; set; }
         public ApplicationStatus ApplicationStatus { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
         [ForeignKey("Position")]
         public int PositionId { get; set; }
     }
