@@ -4,16 +4,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>All applications</h2>
-<br/>
+<div>
+    <div id="header-div">
+        <h2>All applications</h2>
+    </div>
+    <div id="button-div">
+        @Html.ActionLink("New application", "New", "Application", null, new { @class = "btn btn-success add-button" })
+    </div>
+</div>
 
 <table id="main-table" class="table table-striped table-bordered table-sm">
     <thead>
         <tr>
+            <th scope="col">Apply Date</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
             <th scope="col">Position</th>
-            <th scope="col">Apply Date</th>
             <th scope="col">Status</th>
             <th scope="col"></th>
         </tr>
@@ -31,7 +39,7 @@
         });
         function loadApplications(page) {
             $.ajax({
-                url: "api/Job/GetListViewModel",
+                url: "api/Application/GetListViewModel",
                 type: "GET",
                 success: function (response) {
                     document.getElementById("table-body").innerHTML = '';
@@ -60,7 +68,7 @@
         }
         function deleteRow(id) {
             $.ajax({
-                url: "api/Job/Delete/" + id,
+                url: "api/Application/Delete/" + id,
                 type: "DELETE",
                 success: function () {
                     console.log("trying to delete item with id :" + id);
@@ -76,7 +84,7 @@
 
         function saveApplication(application) {
             $.ajax({
-                url: "api/Job/Update",
+                url: "api/Application/Update",
                 type: "PUT",
                 data: JSON.stringify(application),
                 success: function () {
@@ -109,16 +117,21 @@
         }
 
         function createSaveButton(columns, trButtons, application) {
-            columns.forEach(c => c.contentEditable = true);
+            columns[1].contentEditable = true;
+            columns[2].contentEditable = true;
+            columns[3].contentEditable = true;
+            columns[4].contentEditable = true;
+
             removeAllChilds(trButtons);
 
             let saveButton = document.createElement("button");
             saveButton.textContent = 'Save';
             saveButton.classList.add("btn", "btn-success");
             saveButton.addEventListener("click", function () {
-                application.firstName = columns[0].textContent;
-                application.lastName = columns[1].textContent;
-                application.position = columns[2].textContent;
+                application.firstName = columns[1].textContent;
+                application.lastName = columns[2].textContent;
+                application.email = columns[3].textContent;
+                application.phoneNumber = columns[4].textContent;
                 saveApplication(application);
                 createEditDeleteButtons(columns, trButtons, application);
             });
@@ -134,11 +147,16 @@
             let trPosition = document.createElement("td");
             trPosition.textContent = application.position;
             let trDate = document.createElement("td");
-            trDate.textContent = application.applyDate;
+            let date = new Date(application.applyDate);
+            trDate.textContent = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
             let trStatus = document.createElement("td");
             trStatus.textContent = application.applicationStatus;
+            let trEmail = document.createElement("td");
+            trEmail.textContent = application.email;
+            let trPhoneNumber = document.createElement("td");
+            trPhoneNumber.textContent = application.phoneNumber;
 
-            return [trFirstName, trLastName, trPosition, trDate, trStatus];
+            return [trDate, trFirstName, trLastName, trEmail, trPhoneNumber, trPosition, trStatus];
         }
 
         function removeAllChilds(node) {
@@ -172,6 +190,28 @@
 
     .tr-buttons {
         width: 15%;
+    }
+
+    .add-button {
+        font-size: 15px;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+
+    #header-div {
+        width: 50%;
+        padding-top: 10px;
+        height: 100px;
+        float:left;
+    }
+
+    #button-div {
+        padding-top: 40px;
+        padding-right: 20px;
+        text-align: right;
+        height: 100px;
+        float:left;
+        width: 50%;
     }
 
    </style>

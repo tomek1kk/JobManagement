@@ -4,5 +4,204 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div>
+    <div id="header-div">
+        <h2>Job offers</h2>
+    </div>
+    <div id="button-div">
+        @Html.ActionLink("New offer", "New", "Position", null, new { @class = "btn btn-success add-button" })
+    </div>
+</div>
 
+<table id="main-table" class="table table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th scope="col">Created date</th>
+            <th scope="col">Position Name</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Location</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+</table>
+
+
+@section Scripts {
+
+    <script>
+        var page = 1;
+        $(document).ready(function () {
+            loadPositions(1);
+        });
+        function loadPositions(page) {
+            $.ajax({
+                url: "api/Position/GetListViewModel",
+                type: "GET",
+                success: function (response) {
+                    document.getElementById("table-body").innerHTML = '';
+                    $.each(response, function (i, position) {
+                        console.log(position);
+                        let tableRow = document.createElement("tr");
+
+                        let columns = getTableColumns(position);
+
+                        let trButtons = document.createElement("td");
+                        trButtons.classList.add("tr-buttons");
+
+                        createEditDeleteButtons(columns, trButtons, position);
+
+                        columns.forEach(c => tableRow.appendChild(c));
+                        tableRow.appendChild(trButtons);
+
+                        document.getElementById("table-body").appendChild(tableRow);
+                    });
+
+                },
+                error: function () {
+                    alert("load positions error");
+                }
+            });
+        }
+        function deleteRow(id) {
+            $.ajax({
+                url: "api/Position/Delete/" + id,
+                type: "DELETE",
+                success: function () {
+                    console.log("trying to delete item with id :" + id);
+                    loadPositions(0);
+                },
+                error: function () {
+                    alert("delete error");
+                }
+            });
+        }
+
+
+
+        function saveApplication(position) {
+            $.ajax({
+                url: "api/Position/Update",
+                type: "PUT",
+                data: JSON.stringify(position),
+                success: function () {
+                    console.log("updated!");
+                },
+                error: function () {
+                    alert("update error");
+                },
+                contentType: 'position/json'
+            })
+        }
+
+        function createEditDeleteButtons(columns, trButtons, position) {
+
+            columns.forEach(c => c.contentEditable = false);
+            removeAllChilds(trButtons);
+
+            let deleteButton = document.createElement("button");
+            deleteButton.textContent = 'Delete';
+            deleteButton.classList.add("btn", "btn-danger");
+            deleteButton.addEventListener("click", () => deleteRow(position.positionId));
+
+            let editButton = document.createElement("button");
+            editButton.textContent = 'Edit';
+            editButton.classList.add("btn", "btn-info");
+            editButton.addEventListener("click", () => createSaveButton(columns, trButtons, position));
+
+            trButtons.appendChild(editButton);
+            trButtons.appendChild(deleteButton);
+        }
+
+        function createSaveButton(columns, trButtons, position) {
+            columns[1].contentEditable = true;
+            columns[2].contentEditable = true;
+            columns[3].contentEditable = true;
+            columns[4].contentEditable = true;
+
+            removeAllChilds(trButtons);
+
+            let saveButton = document.createElement("button");
+            saveButton.textContent = 'Save';
+            saveButton.classList.add("btn", "btn-success");
+            saveButton.addEventListener("click", function () {
+                position.firstName = columns[1].textContent;
+                position.lastName = columns[2].textContent;
+                position.email = columns[3].textContent;
+                position.phoneNumber = columns[4].textContent;
+                saveApplication(position);
+                createEditDeleteButtons(columns, trButtons, position);
+            });
+
+            trButtons.appendChild(saveButton);
+        }
+
+        function getTableColumns(position) {
+            let trPositionName = document.createElement("td");
+            trPositionName.textContent = position.positionName;
+            let trDate = document.createElement("td");
+            let date = new Date(position.createdDate);
+            trDate.textContent = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+            let trSalary = document.createElement("td");
+            trSalary.textContent = position.salary
+            let trLocation = document.createElement("td");
+            trLocation.textContent = position.location;
+
+            return [trDate, trPositionName, trSalary, trLocation];
+        }
+
+        function removeAllChilds(node) {
+            while (node.firstChild)
+                node.removeChild(node.firstChild);
+        }
+    </script>
+}
+
+<style>
+
+    .btn-danger {
+        padding: 5px;
+        font-size: 11px;
+    }
+
+    .btn-info {
+        padding: 5px;
+        margin-right: 5px;
+        padding-right: 10px;
+        padding-left: 10px;
+        font-size: 11px;
+    }
+
+    .btn-success {
+        padding: 5px;
+        font-size: 11px;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .tr-buttons {
+        width: 15%;
+    }
+
+    .add-button {
+        font-size: 15px;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+
+    #header-div {
+        width: 50%;
+        padding-top: 10px;
+        height: 100px;
+        float: left;
+    }
+
+    #button-div {
+        padding-top: 40px;
+        padding-right: 20px;
+        text-align: right;
+        height: 100px;
+        float: left;
+        width: 50%;
+    }
+</style>
