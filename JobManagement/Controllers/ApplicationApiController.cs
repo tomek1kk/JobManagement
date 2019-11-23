@@ -76,9 +76,18 @@ namespace JobManagement.Controllers
 
         [HttpPut]
         [Route("api/Application/Update")]
-        public void Update([FromBody] JobApplication jobApplication)
+        public void Update([FromBody] JobListViewModel jobApplication)
         {
-            applicationUoW.Repository.UpdateItem(jobApplication);
+
+            JobApplication job = applicationUoW.Repository.GetItem(jobApplication.Id);
+
+            job.Id = jobApplication.Id;
+            job.FirstName = jobApplication.FirstName;
+            job.LastName = jobApplication.LastName;
+            job.Email = jobApplication.Email;
+            job.PhoneNumber = jobApplication.PhoneNumber;
+            
+            applicationUoW.Repository.UpdateItem(job);
             applicationUoW.Save();
         }
     }

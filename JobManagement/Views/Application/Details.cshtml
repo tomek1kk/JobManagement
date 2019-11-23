@@ -1,0 +1,80 @@
+﻿@model JobManagement.ViewModels.ApplicationDetailsViewModel
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+<br />
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 my-column">
+            <div class="header-button">
+                <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="true" aria-controls="multiCollapseExample1">Application Details</a>
+            </div>
+            <div class="collapse multi-collapse in" id="multiCollapseExample1">
+                <div class="card card-body">
+                    Application status: @Model.JobApplication.ApplicationStatus
+                    <br />
+                    Application status: @Model.JobApplication.ApplyDate
+                    <br />
+                    Application status: @Model.JobApplication.Email
+                    <br />
+                    Application status: @Model.JobApplication.FirstName
+                    <br />
+                    Application status: @Model.JobApplication.LastName
+                    <br />
+                    Application status: @Model.JobApplication.PhoneNumber
+                    <br/>
+                    @Html.ActionLink("Edit", "Edit", "Application", new { id = Model.JobApplication.Id})
+
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 my-column">
+            <div class="header-button">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Job details</button>
+            </div>
+            <div class="collapse multi-collapse in" id="multiCollapseExample2">
+                <div class="card card-body">
+                    Position : @Model.Position.PositionName
+                    <br/>
+                    Location : @Model.Position.Location
+                    <br/>
+                    Salary : @Model.Position.Salary
+                    <br/>
+                    Description : @Model.Position.Description
+                    <br/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .header-button {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .my-column {
+        border: 2px solid;
+        border-color: darkgrey;
+        border-radius: 10px;
+        padding-bottom: 20px;
+        margin: 5px;
+    }
+</style>

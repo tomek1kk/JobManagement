@@ -19,5 +19,6 @@ namespace JobManagement.ViewModels
         public string Email { get; set; }
         public IEnumerable<string> Positions { get; set; }
         public string Position { get; set; }
+        public int Id { get; set; }
     }
 }

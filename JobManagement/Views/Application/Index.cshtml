@@ -101,6 +101,7 @@
 
             columns.forEach(c => c.contentEditable = false);
             removeAllChilds(trButtons);
+            assignColumns(columns, application.id);
 
             let deleteButton = document.createElement("button");
             deleteButton.textContent = 'Delete';
@@ -117,10 +118,14 @@
         }
 
         function createSaveButton(columns, trButtons, application) {
-            columns[1].contentEditable = true;
-            columns[2].contentEditable = true;
-            columns[3].contentEditable = true;
-            columns[4].contentEditable = true;
+            let editableColumns = [columns[1], columns[2], columns[3], columns[4]];
+            editableColumns.forEach(c => c.contentEditable = true);
+            columns.forEach(c => c.onclick = null);
+            columns.forEach(c => {
+                if (!editableColumns.includes(c)) {
+                    c.classList.remove("record");
+                }
+            })
 
             removeAllChilds(trButtons);
 
@@ -156,12 +161,23 @@
             let trPhoneNumber = document.createElement("td");
             trPhoneNumber.textContent = application.phoneNumber;
 
-            return [trDate, trFirstName, trLastName, trEmail, trPhoneNumber, trPosition, trStatus];
+            let columns = [trDate, trFirstName, trLastName, trEmail, trPhoneNumber, trPosition, trStatus];
+
+            return columns;
         }
 
         function removeAllChilds(node) {
             while (node.firstChild)
                 node.removeChild(node.firstChild);
+        }
+
+        function assignColumns(columns, id) {
+            columns.forEach(c => {
+                c.classList.add("record");
+                c.onclick = function () {
+                    window.location.href = "/Application/Details/" + id;
+                }
+            });
         }
     </script>
 }
@@ -212,6 +228,10 @@
         height: 100px;
         float:left;
         width: 50%;
+    }
+
+    .record:hover {
+        cursor: pointer;
     }
 
    </style>
