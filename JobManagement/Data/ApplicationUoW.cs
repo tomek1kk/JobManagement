@@ -6,24 +6,23 @@ using System.Threading.Tasks;
 
 namespace JobManagement.Data
 {
-    public class ApplicationUoW
+    public class GenericUoW<T> where T : class
     {
-        private GenericRepository<JobApplication> applicationsRepository;
-
+        private GenericRepository<T> repository;
         private ApplicationDbContext context;
 
-        public ApplicationUoW(ApplicationDbContext context)
+        public GenericUoW(ApplicationDbContext context)
         {
             this.context = context;
         }
 
-        public GenericRepository<JobApplication> ApplicationsRepository
+        public GenericRepository<T> Repository
         {
             get
             {
-                if (applicationsRepository == null)
-                    return new GenericRepository<JobApplication>(context);
-                return applicationsRepository;
+                if (repository == null)
+                    repository = new GenericRepository<T>(context);
+                return repository;
             }
         }
 

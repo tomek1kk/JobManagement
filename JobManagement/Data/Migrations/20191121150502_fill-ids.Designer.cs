@@ -4,14 +4,16 @@ using JobManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JobManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191121150502_fill-ids")]
+    partial class fillids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,21 +27,15 @@ namespace JobManagement.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ApplicationStatus");
-
-                    b.Property<DateTime>("ApplyDate");
-
-                    b.Property<string>("Email");
-
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<int>("PositionId");
+                    b.Property<int?>("PositionID");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PositionID");
 
                     b.ToTable("JobApplications");
                 });
@@ -50,15 +46,7 @@ namespace JobManagement.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("AddTime");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Location");
-
                     b.Property<string>("PositionName");
-
-                    b.Property<int>("Salary");
 
                     b.HasKey("PositionID");
 
@@ -224,6 +212,13 @@ namespace JobManagement.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("JobManagement.Models.JobApplication", b =>
+                {
+                    b.HasOne("JobManagement.Models.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

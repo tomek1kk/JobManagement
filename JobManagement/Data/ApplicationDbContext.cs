@@ -15,5 +15,6 @@ namespace JobManagement.Data
         }
 
         public DbSet<JobApplication> JobApplications { get; set; }
+        public DbSet<Position> Positions { get; set; }
     }
 }

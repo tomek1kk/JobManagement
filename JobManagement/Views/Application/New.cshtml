@@ -1,4 +1,4 @@
-﻿@model JobManagement.Models.JobApplication
+﻿@model JobManagement.ViewModels.AddApplicationViewModel
 @{
     ViewData["Title"] = "New";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,17 +8,31 @@
 
 @using (Html.BeginForm("AddApplication", "Application", FormMethod.Post))
 {
-    @Html.LabelFor(a => a.FirstName)
-    @Html.TextBoxFor(a => a.FirstName)
-    <br />
-    @Html.LabelFor(a => a.LastName)
-    @Html.TextBoxFor(a => a.LastName)
-    <br />
-    @Html.LabelFor(a => a.Position)
-    @Html.TextBoxFor(a => a.Position)
+    <div class="form-group">
+        @Html.LabelFor(a => a.FirstName)
+        @Html.TextBoxFor(a => a.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.FirstName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(a => a.LastName)
+        @Html.TextBoxFor(a => a.LastName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(a => a.PhoneNumber)
+        @Html.TextBoxFor(a => a.PhoneNumber, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(a => a.Email)
+        @Html.TextBoxFor(a => a.Email, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.DropDownListFor(m => m.Position,
+            Model.Positions.Select(c => new SelectListItem {Text =c, Value =c}),
+            new { @class = "form-control" })
+    </div>
+
     <button type="submit">Submit</button>
 
-    @Html.HiddenFor(a => a.Id)
+    @Html.HiddenFor(a => a.Positions)
 }
-
-

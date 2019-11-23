@@ -6,23 +6,20 @@
 
 <div>
     <div id="header-div">
-        <h2>All applications</h2>
+        <h2>Job offers</h2>
     </div>
     <div id="button-div">
-        @Html.ActionLink("New application", "New", "Application", null, new { @class = "btn btn-success add-button" })
+        @Html.ActionLink("New offer", "New", "Position", null, new { @class = "btn btn-success add-button" })
     </div>
 </div>
 
 <table id="main-table" class="table table-striped table-bordered table-sm">
     <thead>
         <tr>
-            <th scope="col">Apply Date</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
-            <th scope="col">Position</th>
-            <th scope="col">Status</th>
+            <th scope="col">Created date</th>
+            <th scope="col">Position Name</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Location</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -35,24 +32,24 @@
     <script>
         var page = 1;
         $(document).ready(function () {
-            loadApplications(1);
+            loadPositions(1);
         });
-        function loadApplications(page) {
+        function loadPositions(page) {
             $.ajax({
-                url: "api/Application/GetListViewModel",
+                url: "api/Position/GetListViewModel",
                 type: "GET",
                 success: function (response) {
                     document.getElementById("table-body").innerHTML = '';
-                    $.each(response, function (i, application) {
-                        console.log(application);
+                    $.each(response, function (i, position) {
+                        console.log(position);
                         let tableRow = document.createElement("tr");
 
-                        let columns = getTableColumns(application);
+                        let columns = getTableColumns(position);
 
                         let trButtons = document.createElement("td");
                         trButtons.classList.add("tr-buttons");
 
-                        createEditDeleteButtons(columns, trButtons, application);
+                        createEditDeleteButtons(columns, trButtons, position);
 
                         columns.forEach(c => tableRow.appendChild(c));
                         tableRow.appendChild(trButtons);
@@ -62,17 +59,17 @@
 
                 },
                 error: function () {
-                    alert("load applications error");
+                    alert("load positions error");
                 }
             });
         }
         function deleteRow(id) {
             $.ajax({
-                url: "api/Application/Delete/" + id,
+                url: "api/Position/Delete/" + id,
                 type: "DELETE",
                 success: function () {
                     console.log("trying to delete item with id :" + id);
-                    loadApplications(0);
+                    loadPositions(0);
                 },
                 error: function () {
                     alert("delete error");
@@ -82,22 +79,22 @@
 
 
 
-        function saveApplication(application) {
+        function saveApplication(position) {
             $.ajax({
-                url: "api/Application/Update",
+                url: "api/Position/Update",
                 type: "PUT",
-                data: JSON.stringify(application),
+                data: JSON.stringify(position),
                 success: function () {
                     console.log("updated!");
                 },
                 error: function () {
                     alert("update error");
                 },
-                contentType: 'application/json'
-            })            
+                contentType: 'position/json'
+            })
         }
 
-        function createEditDeleteButtons(columns, trButtons, application) {
+        function createEditDeleteButtons(columns, trButtons, position) {
 
             columns.forEach(c => c.contentEditable = false);
             removeAllChilds(trButtons);
@@ -105,18 +102,18 @@
             let deleteButton = document.createElement("button");
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add("btn", "btn-danger");
-            deleteButton.addEventListener("click", () => deleteRow(application.id));
+            deleteButton.addEventListener("click", () => deleteRow(position.positionId));
 
             let editButton = document.createElement("button");
             editButton.textContent = 'Edit';
             editButton.classList.add("btn", "btn-info");
-            editButton.addEventListener("click", () => createSaveButton(columns, trButtons, application));
+            editButton.addEventListener("click", () => createSaveButton(columns, trButtons, position));
 
             trButtons.appendChild(editButton);
             trButtons.appendChild(deleteButton);
         }
 
-        function createSaveButton(columns, trButtons, application) {
+        function createSaveButton(columns, trButtons, position) {
             columns[1].contentEditable = true;
             columns[2].contentEditable = true;
             columns[3].contentEditable = true;
@@ -128,35 +125,29 @@
             saveButton.textContent = 'Save';
             saveButton.classList.add("btn", "btn-success");
             saveButton.addEventListener("click", function () {
-                application.firstName = columns[1].textContent;
-                application.lastName = columns[2].textContent;
-                application.email = columns[3].textContent;
-                application.phoneNumber = columns[4].textContent;
-                saveApplication(application);
-                createEditDeleteButtons(columns, trButtons, application);
+                position.firstName = columns[1].textContent;
+                position.lastName = columns[2].textContent;
+                position.email = columns[3].textContent;
+                position.phoneNumber = columns[4].textContent;
+                saveApplication(position);
+                createEditDeleteButtons(columns, trButtons, position);
             });
 
             trButtons.appendChild(saveButton);
         }
 
-        function getTableColumns(application) {
-            let trFirstName = document.createElement("td");
-            trFirstName.textContent = application.firstName;
-            let trLastName = document.createElement("td");
-            trLastName.textContent = application.lastName;
-            let trPosition = document.createElement("td");
-            trPosition.textContent = application.position;
+        function getTableColumns(position) {
+            let trPositionName = document.createElement("td");
+            trPositionName.textContent = position.positionName;
             let trDate = document.createElement("td");
-            let date = new Date(application.applyDate);
+            let date = new Date(position.createdDate);
             trDate.textContent = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
-            let trStatus = document.createElement("td");
-            trStatus.textContent = application.applicationStatus;
-            let trEmail = document.createElement("td");
-            trEmail.textContent = application.email;
-            let trPhoneNumber = document.createElement("td");
-            trPhoneNumber.textContent = application.phoneNumber;
+            let trSalary = document.createElement("td");
+            trSalary.textContent = position.salary
+            let trLocation = document.createElement("td");
+            trLocation.textContent = position.location;
 
-            return [trDate, trFirstName, trLastName, trEmail, trPhoneNumber, trPosition, trStatus];
+            return [trDate, trPositionName, trSalary, trLocation];
         }
 
         function removeAllChilds(node) {
@@ -166,7 +157,7 @@
     </script>
 }
 
-    <style>
+<style>
 
     .btn-danger {
         padding: 5px;
@@ -202,7 +193,7 @@
         width: 50%;
         padding-top: 10px;
         height: 100px;
-        float:left;
+        float: left;
     }
 
     #button-div {
@@ -210,8 +201,7 @@
         padding-right: 20px;
         text-align: right;
         height: 100px;
-        float:left;
+        float: left;
         width: 50%;
     }
-
-   </style>
+</style>

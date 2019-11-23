@@ -28,6 +28,21 @@ namespace JobManagement.Data
             dbSet.Add(item);
         }
 
+        public void DeleteItem(T item)
+        {
+            dbSet.Remove(item);
+        }
+
+        public void UpdateItem(T item)
+        {
+            dbSet.Update(item);
+        }
+
+        public T GetItem(int id)
+        {
+            return dbSet.Find(id);
+        }
+
 
     }
 }

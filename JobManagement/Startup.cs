@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
 using Microsoft.AspNetCore.Authentication;
+using JobManagement.Models;
 
 namespace JobManagement
 {
@@ -45,7 +46,8 @@ namespace JobManagement
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddScoped<ApplicationUoW>();
+            services.AddScoped<GenericUoW<JobApplication>>();
+            services.AddScoped<GenericUoW<Position>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,7 +73,7 @@ namespace JobManagement
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Application}/{action=Index}/{id?}");
             });
         }
     }
