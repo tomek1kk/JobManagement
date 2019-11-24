@@ -28,10 +28,10 @@
                     Application status: @Model.JobApplication.LastName
                     <br />
                     Application status: @Model.JobApplication.PhoneNumber
-                    <br/>
-                    @Html.ActionLink("Edit", "Edit", "Application", new { id = Model.JobApplication.Id})
+                    <br />
+                    @Html.ActionLink("Edit", "Edit", "Application", new { id = Model.JobApplication.Id })
 
-                    
+
                 </div>
             </div>
         </div>
@@ -41,14 +41,17 @@
             </div>
             <div class="collapse multi-collapse in" id="multiCollapseExample2">
                 <div class="card card-body">
-                    Position : @Model.Position.PositionName
-                    <br/>
-                    Location : @Model.Position.Location
-                    <br/>
-                    Salary : @Model.Position.Salary
-                    <br/>
-                    Description : @Model.Position.Description
-                    <br/>
+                    @if (Model.Position != null)
+                    {
+                        <p>Position: @Model.Position.PositionName </p>
+                        <br />
+                        <p>Location : @Model.Position.Location </p>
+                        <br />
+                        <p>Salary : @Model.Position.Salary </p>
+                        <br />
+                        <p>Description : @Model.Position.Description </p>
+                        <br />
+                    }
                 </div>
             </div>
         </div>

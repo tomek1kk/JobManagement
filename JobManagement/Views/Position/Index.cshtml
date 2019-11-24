@@ -79,7 +79,7 @@
 
 
 
-        function saveApplication(position) {
+        function savePosition(position) {
             $.ajax({
                 url: "api/Position/Update",
                 type: "PUT",
@@ -90,7 +90,7 @@
                 error: function () {
                     alert("update error");
                 },
-                contentType: 'position/json'
+                contentType: 'application/json'
             })
         }
 
@@ -98,6 +98,7 @@
 
             columns.forEach(c => c.contentEditable = false);
             removeAllChilds(trButtons);
+            assignColumns(columns, position.positionId);
 
             let deleteButton = document.createElement("button");
             deleteButton.textContent = 'Delete';
@@ -114,10 +115,15 @@
         }
 
         function createSaveButton(columns, trButtons, position) {
-            columns[1].contentEditable = true;
-            columns[2].contentEditable = true;
-            columns[3].contentEditable = true;
-            columns[4].contentEditable = true;
+
+            let editableColumns = [columns[1], columns[2], columns[3]];
+            editableColumns.forEach(c => c.contentEditable = true);
+            columns.forEach(c => c.onclick = null);
+            columns.forEach(c => {
+                if (!editableColumns.includes(c)) {
+                    c.classList.remove("record");
+                }
+            });
 
             removeAllChilds(trButtons);
 
@@ -125,11 +131,11 @@
             saveButton.textContent = 'Save';
             saveButton.classList.add("btn", "btn-success");
             saveButton.addEventListener("click", function () {
-                position.firstName = columns[1].textContent;
-                position.lastName = columns[2].textContent;
-                position.email = columns[3].textContent;
-                position.phoneNumber = columns[4].textContent;
-                saveApplication(position);
+                position.positionName = columns[1].textContent;
+                position.salary = columns[2].textContent;
+                position.location = columns[3].textContent;
+
+                savePosition(position);
                 createEditDeleteButtons(columns, trButtons, position);
             });
 
@@ -153,6 +159,15 @@
         function removeAllChilds(node) {
             while (node.firstChild)
                 node.removeChild(node.firstChild);
+        }
+
+        function assignColumns(columns, id) {
+            columns.forEach(c => {
+                c.classList.add("record");
+                c.onclick = function () {
+                    window.location.href = "/Position/Details/" + id;
+                }
+            });
         }
     </script>
 }
@@ -203,5 +218,9 @@
         height: 100px;
         float: left;
         width: 50%;
+    }
+
+    .record:hover {
+        cursor: pointer;
     }
 </style>

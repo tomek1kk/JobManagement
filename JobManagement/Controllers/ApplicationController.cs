@@ -99,7 +99,7 @@ namespace JobManagement.Controllers
                 LastName = job.LastName,
                 Email = job.Email,
                 PhoneNumber = job.PhoneNumber,
-                Position = positionUoW.Repository.GetItem(job.PositionId).PositionName
+                Position = positionUoW.Repository.GetItem(job.PositionId) != null ? positionUoW.Repository.GetItem(job.PositionId).PositionName : null
             };
             return RedirectToAction("New", new RouteValueDictionary(model));
         }

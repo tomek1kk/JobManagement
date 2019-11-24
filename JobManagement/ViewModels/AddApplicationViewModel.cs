@@ -11,11 +11,13 @@ namespace JobManagement.ViewModels
 {
     public class AddApplicationViewModel
     {
-        [Required]
-        [RegularExpression(@"^[a-zA-Z''-'\s]{5,40}$", ErrorMessage = "Wrong first name!")]
+        [RegularExpression(@"[A-Z][a-z\s]{1,20}", ErrorMessage = "Wrong first name!")]
         public string FirstName { get; set; }
+        [RegularExpression(@"[A-Z][a-z\s]{1,20}", ErrorMessage = "Wrong last name!")]
         public string LastName { get; set; }
+        [RegularExpression(@"[0-9+]{9,13}", ErrorMessage = "Wrong phone number!")]
         public string PhoneNumber { get; set; }
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Wrong email!")]
         public string Email { get; set; }
         public IEnumerable<string> Positions { get; set; }
         public string Position { get; set; }

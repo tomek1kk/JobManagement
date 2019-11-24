@@ -65,8 +65,14 @@ namespace JobManagement.Controllers
 
         [HttpPut]
         [Route("api/Position/Update")]
-        public void Update([FromBody] Position position)
+        public void Update([FromBody] PositionViewModel positionModel)
         {
+            Position position = positionUoW.Repository.GetItem(positionModel.PositionId);
+
+            position.PositionName = positionModel.PositionName;
+            position.Salary = positionModel.Salary;
+            position.Location = positionModel.Location;
+
             positionUoW.Repository.UpdateItem(position);
             positionUoW.Save();
         }

@@ -1,0 +1,14 @@
+﻿@model JobManagement.Models.Position
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+@Model.AddTime
+@Model.PositionName
+@Model.Location
+@Model.Description
+
+@Html.ActionLink("Edit", "Edit", "Position", new { id = Model.PositionID })
