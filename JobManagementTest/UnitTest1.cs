@@ -1,15 +1,16 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Xunit;
 
 namespace JobManagementTest
 {
-
+    [TestClass]
     public class UnitTest1
     {
-        [Fact]
-        public void Test1()
+        [TestMethod]
+        public void Test_TEST()
         {
-
+            int x = 2;
+            Assert.IsFalse(x == 1);
         }
     }
 }
