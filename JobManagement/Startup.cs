@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
 using Microsoft.AspNetCore.Authentication;
 using JobManagement.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace JobManagement
 {
@@ -45,6 +46,10 @@ namespace JobManagement
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Description = "Swagger api docs" });
+            });
 
             services.AddScoped<GenericUoW<JobApplication>>();
             services.AddScoped<GenericUoW<Position>>();
@@ -74,6 +79,12 @@ namespace JobManagement
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Application}/{action=Index}/{id?}");
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(s =>
+            {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "Api docs");
             });
         }
     }
