@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using JobManagement.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
+using SendGrid.Helpers.Mail;
+using SendGrid;
 
 namespace JobManagement.Controllers
 {
@@ -22,7 +24,7 @@ namespace JobManagement.Controllers
             this.positionUoW = positionUoW;
         }
 
-        public IActionResult Index() 
+        public IActionResult Index()
         {
             List<JobApplication> jobs = applicationUoW.Repository.GetAll();
             ViewData["jobs"] = jobs;
@@ -33,6 +35,7 @@ namespace JobManagement.Controllers
         {
             if (viewModel == null)
             {
+
                 return View(new AddApplicationViewModel
                 {
                     Positions = positionUoW.Repository.GetAll().Select(c => c.PositionName)
@@ -45,7 +48,7 @@ namespace JobManagement.Controllers
             }
         }
 
-        public IActionResult AddApplication(AddApplicationViewModel job)
+        public async Task<IActionResult> AddApplication(AddApplicationViewModel job)
         {
             if (job.Id > 0) // editing existing application
             {
@@ -60,6 +63,27 @@ namespace JobManagement.Controllers
             }
             else
             {
+                //var client = new SendGridClient("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");
+                var client = new SendGridClient("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");
+                var msg = new SendGridMessage();
+
+                msg.SetFrom(new EmailAddress("tomek1kkgwcostam@gmail.com", "tomek1kk"));
+
+                var recipients = new List<EmailAddress>
+                {
+                    //new EmailAddress("holdenkold@gmail.com", "Holden Kold"),
+                    new EmailAddress("tomek1kkgw@gmail.com", "Tom Kostowski"),
+                };
+                msg.AddTos(recipients);
+
+                msg.SetSubject("New application!");
+
+                msg.AddContent(MimeType.Text, "Hello World plain text!");
+                msg.AddContent(MimeType.Html, "<p>New job application added! " +
+                    job.FirstName + " " + job.LastName + " just applied." +
+                    "Check it asap!</p>");
+                var response = await client.SendEmailAsync(msg);
+
                 JobApplication application = new JobApplication
                 {
                     FirstName = job.FirstName,

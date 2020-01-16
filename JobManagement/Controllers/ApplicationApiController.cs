@@ -41,7 +41,7 @@ namespace JobManagement.Controllers
             for (int i = 0; i < applications.Count; i++)
             {
                 var position = positionUoW.Repository.GetItem(applications[i].PositionId);
-                
+
                 jobViews.Add(new JobListViewModel
                 {
                     Id = applications[i].Id,
@@ -86,7 +86,7 @@ namespace JobManagement.Controllers
             job.LastName = jobApplication.LastName;
             job.Email = jobApplication.Email;
             job.PhoneNumber = jobApplication.PhoneNumber;
-            
+
             applicationUoW.Repository.UpdateItem(job);
             applicationUoW.Save();
         }
